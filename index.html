@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MK1 Kombat Guide</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            mkDark: '#0d1117',
+            mkCard: '#161b22',
+            mkBorder: '#30363d',
+            mkGold: '#d29922',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Стили файтинг-кнопок */
+    .mk-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 24px; height: 24px; padding: 0 5px; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 800; line-height: 1; color: #fff;
+      box-shadow: 0 2px 0 rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+    }
+    .mk-btn--ps-square   { background: #be185d; }
+    .mk-btn--ps-triangle { background: #0f766e; }
+    .mk-btn--ps-cross    { background: #1d4ed8; }
+    .mk-btn--ps-circle   { background: #b91c1c; }
+
+    .mk-btn--xb-x { background: #0284c7; }
+    .mk-btn--xb-y { background: #ca8a04; }
+    .mk-btn--xb-a { background: #16a34a; }
+    .mk-btn--xb-b { background: #dc2626; }
+
+    .mk-btn--uni-1, .mk-btn--uni-2, .mk-btn--uni-3, .mk-btn--uni-4 { background: #475569; }
+
+    .mk-btn--trigger  { background: #7c3aed; border-radius: 6px; font-size: 0.7rem; }
+    .mk-btn--kameo    { background: #d97706; border-radius: 6px; font-size: 0.7rem; }
+    .mk-btn--shoulder { background: #64748b; border-radius: 6px; font-size: 0.7rem; }
+    .mk-btn--fb       { background: linear-gradient(135deg, #991b1b, #ea580c); border-radius: 6px; font-size: 0.7rem; }
+
+    .mk-dir {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 4px; background: #21262d;
+      color: #f0f6fc; border: 1px solid #30363d;
+    }
+    .mk-mod {
+      padding: 1px 5px; font-size: 0.65rem; font-weight: bold; border-radius: 4px;
+      background: #2a2f3d; color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-mkDark text-slate-200 min-h-screen flex flex-col font-sans">
+
+  <!-- Шапка -->
+  <header class="border-b border-mkBorder bg-mkCard sticky top-0 z-30 px-4 py-3 shadow-md">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <button id="back-btn" class="hidden px-2.5 py-1 text-sm bg-mkBorder hover:bg-slate-700 rounded text-slate-300 transition">
+          ← Назад
+        </button>
+        <h1 id="app-title" class="text-lg md:text-xl font-bold tracking-wider text-mkGold">
+          MK1 FRAME DATA
+        </h1>
+      </div>
+
+      <!-- Переключатель раскладки геймпада -->
+      <div class="flex items-center gap-1.5 text-xs">
+        <span class="text-slate-400 hidden sm:inline">Ввод:</span>
+        <select id="layout-select" class="bg-mkDark border border-mkBorder rounded px-2 py-1 text-slate-200 font-semibold focus:outline-none focus:border-mkGold">
+          <option value="ps">PlayStation</option>
+          <option value="xbox">Xbox</option>
+          <option value="universal">1, 2, 3, 4</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-full mx-auto p-4">
+    <!-- ЭКРАН 1: ВЫБОР БОЙЦА (ROSTER) -->
+    <section id="roster-view" class="space-y-4">
+      <div class="flex gap-2 border-b border-mkBorder pb-2">
+        <button id="tab-main" class="px-4 py-1.5 font-bold rounded-lg bg-mkGold text-black transition">
+          Бойцы (<span id="count-main">0</span>)
+        </button>
+        <button id="tab-kameo" class="px-4 py-1.5 font-bold rounded-lg bg-mkBorder text-slate-300 hover:bg-slate-700 transition">
+          Камео (<span id="count-kameo">0</span>)
+        </button>
+      </div>
+
+      <input id="roster-search" type="text" placeholder="Поиск бойца..." 
+             class="w-full bg-mkCard border border-mkBorder rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-mkGold" />
+
+      <div id="roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <!-- Карточки персонажей генерируются скриптом -->
+      </div>
+    </section>
+
+    <!-- ЭКРАН 2: СПИСОК ПРИЕМОВ (MOVE LIST) -->
+    <section id="moves-view" class="hidden space-y-4">
+      <!-- Панель управления и фильтры бойца -->
+      <div class="bg-mkCard border border-mkBorder rounded-xl p-3 flex flex-wrap gap-3 items-center justify-between">
+        <!-- Табы категорий -->
+        <div class="flex flex-wrap gap-1" id="category-tabs">
+          <button data-cat="all" class="cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkGold text-black">Все</button>
+          <button data-cat="basic_attacks" class="cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkBorder hover:bg-slate-700 text-slate-300">Нормалы</button>
+          <button data-cat="strings" class="cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkBorder hover:bg-slate-700 text-slate-300">Серии</button>
+          <button data-cat="specials" class="cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkBorder hover:bg-slate-700 text-slate-300">Спецприемы</button>
+          <button data-cat="aerials" class="cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkBorder hover:bg-slate-700 text-slate-300">Воздух</button>
+        </div>
+
+        <!-- Punish Finder -->
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-slate-400 font-semibold">Паниш:</span>
+          <button id="filter-p7" class="px-2.5 py-1 rounded border border-mkBorder hover:border-yellow-500 bg-mkDark text-slate-300 font-bold transition">
+            ≤ 7 кадров
+          </button>
+          <button id="filter-p8" class="px-2.5 py-1 rounded border border-mkBorder hover:border-yellow-500 bg-mkDark text-slate-300 font-bold transition">
+            ≤ 8 кадров
+          </button>
+        </div>
+      </div>
+
+      <!-- Живой поиск по ударам -->
+      <input id="move-search" type="text" placeholder="Поиск по названию или высоте (Высокий, Средний, Оверхед, Нижний)..." 
+       class="w-full bg-mkCard border border-mkBorder rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-mkGold" />
+
+      <!-- Контейнер для списка приемов -->
+      <div id="moves-container" class="space-y-2"></div>
+    </section>
+  </main>
+
+  <script>
+    // --- ДАННЫЕ И СОСТОЯНИЕ ---
+    let rosterData = [];
+    let currentCharData = null;
+    let activeRosterType = 'main';
+    let activeCategory = 'all';
+    let currentLayout = localStorage.getItem('mk1_gamepad_layout') || 'ps';
+    let punishFilter = null; // null, 7 или 8
+
+    document.getElementById('layout-select').value = currentLayout;
+
+    // --- ПАРСЕР НОТАЦИИ ---
+    const BUTTON_MAP = {
+      '1': { ps: { l: '□', c: 'mk-btn--ps-square' }, xbox: { l: 'X', c: 'mk-btn--xb-x' }, uni: { l: '1', c: 'mk-btn--uni-1' } },
+      '2': { ps: { l: '△', c: 'mk-btn--ps-triangle' }, xbox: { l: 'Y', c: 'mk-btn--xb-y' }, uni: { l: '2', c: 'mk-btn--uni-2' } },
+      '3': { ps: { l: '✕', c: 'mk-btn--ps-cross' }, xbox: { l: 'A', c: 'mk-btn--xb-a' }, uni: { l: '3', c: 'mk-btn--uni-3' } },
+      '4': { ps: { l: '○', c: 'mk-btn--ps-circle' }, xbox: { l: 'B', c: 'mk-btn--xb-b' }, uni: { l: '4', c: 'mk-btn--uni-4' } },
+      'AMP': { ps: { l: 'R2', c: 'mk-btn--trigger' }, xbox: { l: 'RT', c: 'mk-btn--trigger' }, uni: { l: 'AMP', c: 'mk-btn--trigger' } },
+      'K': { ps: { l: 'R1', c: 'mk-btn--kameo' }, xbox: { l: 'RB', c: 'mk-btn--kameo' }, uni: { l: 'K', c: 'mk-btn--kameo' } },
+      'FB': { ps: { l: 'L2+R2', c: 'mk-btn--fb' }, xbox: { l: 'LT+RT', c: 'mk-btn--fb' }, uni: { l: 'FB', c: 'mk-btn--fb' } },
+      'THROW': { ps: { l: 'L1', c: 'mk-btn--shoulder' }, xbox: { l: 'LB', c: 'mk-btn--shoulder' }, uni: { l: 'THROW', c: 'mk-btn--shoulder' } },
+    };
+
+    const DIR_ANGLES = { F: 0, DF: 45, FD: 45, D: 90, DB: 135, BD: 135, B: 180, UB: -135, BU: -135, U: -90, UF: -45, FU: -45 };
+    const TOKEN_REGEX = /\b(Air|Hold|Release)\b|(L2\s*\+\s*R2|LT\s*\+\s*RT|Fatal\s*Blow|\bFB\b)|(\bAMP\b|\bEX\b)|(\bThrow\b)|(\bKameo\b|\bK\b)|(UF|FU|UB|BU|DF|FD|DB|BD|[UDFB])|([1234])|(,)|(\+)/gi;
+
+    function renderNotation(notation, layout) {
+      if (!notation) return '';
+      const lay = layout === 'universal' ? 'uni' : layout;
+      let html = '';
+      let match;
+      TOKEN_REGEX.lastIndex = 0;
+
+      while ((match = TOKEN_REGEX.exec(notation)) !== null) {
+        const [, mod, fb, amp, thr, kam, dir, btn, comma, plus] = match;
+        if (mod) html += `<span class="mk-mod mr-1">${mod.toUpperCase()}</span>`;
+        else if (fb) html += `<kbd class="mk-btn ${BUTTON_MAP.FB[lay].c} mx-0.5">${BUTTON_MAP.FB[lay].l}</kbd>`;
+        else if (amp) html += `<kbd class="mk-btn ${BUTTON_MAP.AMP[lay].c} mx-0.5">${BUTTON_MAP.AMP[lay].l}</kbd>`;
+        else if (thr) html += `<kbd class="mk-btn ${BUTTON_MAP.THROW[lay].c} mx-0.5">${BUTTON_MAP.THROW[lay].l}</kbd>`;
+        else if (kam) html += `<kbd class="mk-btn ${BUTTON_MAP.K[lay].c} mx-0.5">${BUTTON_MAP.K[lay].l}</kbd>`;
+        else if (dir) {
+          const angle = DIR_ANGLES[dir.toUpperCase()] ?? 0;
+          html += `<span class="mk-dir mx-0.5"><svg viewBox="0 0 24 24" width="14" height="14" style="transform:rotate(${angle}deg)"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span>`;
+        } else if (btn) {
+          html += `<kbd class="mk-btn ${BUTTON_MAP[btn][lay].c} mx-0.5">${BUTTON_MAP[btn][lay].l}</kbd>`;
+        } else if (comma) {
+          html += `<span class="text-slate-500 font-bold mx-1">›</span>`;
+        } else if (plus) {
+          html += `<span class="text-slate-400 font-bold mx-0.5">+</span>`;
+        }
+      }
+      return html || notation;
+    }
+
+    // --- БЕЙДЖ БЕЗОПАСНОСТИ НА БЛОКЕ ---
+    function renderBlockAdv(adv) {
+      if (adv === null || adv === undefined || adv === '') return `<span class="text-slate-500">-</span>`;
+      const num = parseInt(adv, 10);
+      if (isNaN(num)) return `<span class="px-2 py-0.5 rounded text-xs bg-slate-800 text-slate-300">${adv}</span>`;
+
+      if (num > 0) return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-green-950 text-green-400 border border-green-700">+${num}</span>`;
+      if (num >= -7) return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-800 text-slate-300 border border-slate-600">${num}</span>`;
+      return `<span class="px-2 py-0.5 rounded text-xs font-bold bg-red-950 text-red-400 border border-red-700">${num}</span>`;
+    }
+
+    // --- ЗАГРУЗКА И НАВИГАЦИЯ ---
+    async function init() {
+      try {
+        const res = await fetch('./data/roster.json');
+        const data = await res.json();
+        rosterData = data.characters || [];
+        
+        document.getElementById('count-main').textContent = data.main_roster_count || 0;
+        document.getElementById('count-kameo').textContent = data.kameo_roster_count || 0;
+        renderRoster();
+      } catch (e) {
+        document.getElementById('roster-grid').innerHTML = `
+          <div class="col-span-full p-4 bg-red-950/50 border border-red-700 rounded-lg text-red-200">
+            <strong>Не удалось загрузить roster.json!</strong><br>
+            Убедись, что страница открыта через локальный веб-сервер (Live Server или python -m http.server), а не просто двойным кликом по файлу (file:///).
+          </div>`;
+      }
+    }
+
+    function renderRoster() {
+      const query = document.getElementById('roster-search').value.toLowerCase();
+      const grid = document.getElementById('roster-grid');
+      grid.innerHTML = '';
+
+      const filtered = rosterData.filter(c => 
+        (activeRosterType === 'kameo' ? c.is_kameo : !c.is_kameo) &&
+        c.display_name.toLowerCase().includes(query)
+      );
+
+      filtered.forEach(char => {
+        const card = document.createElement('button');
+        card.className = 'flex flex-col items-center justify-center p-3 bg-mkCard hover:bg-slate-800 border border-mkBorder hover:border-mkGold rounded-xl text-center transition group shadow';
+        card.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-mkGold font-bold text-lg mb-2 group-hover:scale-105 transition">
+            ${char.display_name.substring(0, 2).toUpperCase()}
+          </div>
+          <span class="font-bold text-sm text-slate-200 group-hover:text-mkGold">${char.display_name}</span>
+        `;
+        card.onclick = () => loadCharacter(char);
+        grid.appendChild(card);
+      });
+    }
+
+    async function loadCharacter(char) {
+      try {
+        const res = await fetch(`./${char.data_path}`);
+        currentCharData = await res.json();
+
+        document.getElementById('app-title').textContent = currentCharData.character.toUpperCase();
+        document.getElementById('roster-view').classList.add('hidden');
+        document.getElementById('moves-view').classList.remove('hidden');
+        document.getElementById('back-btn').classList.remove('hidden');
+
+        activeCategory = 'all';
+        punishFilter = null;
+        updateCatButtons();
+        renderMoves();
+        window.scrollTo(0, 0);
+      } catch (err) {
+        alert('Ошибка загрузки данных персонажа: ' + err.message);
+      }
+    }
+
+    function renderMoves() {
+      if (!currentCharData) return;
+      const container = document.getElementById('moves-container');
+      container.innerHTML = '';
+
+      const search = document.getElementById('move-search').value.toLowerCase();
+      let moves = [];
+
+      const categories = ['basic_attacks', 'strings', 'specials', 'aerials'];
+      categories.forEach(cat => {
+        if (activeCategory === 'all' || activeCategory === cat) {
+          (currentCharData[cat] || []).forEach(m => moves.push({ ...m, _category: cat }));
+        }
+      });
+
+      // Фильтрация
+      // Фильтрация с поддержкой русского языка
+      moves = moves.filter(m => {
+        const q = search.toLowerCase();
+        const matchSearch = m.name.toLowerCase().includes(q) || 
+                            m.hit_level.toLowerCase().includes(q) ||
+                            m.input.toLowerCase().includes(q);
+        
+        let matchPunish = true;
+        if (punishFilter !== null && m.startup !== null) {
+          matchPunish = Number(m.startup) <= punishFilter && Number(m.startup) > 0;
+        }
+        return matchSearch && matchPunish;
+      });
+
+      if (moves.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-slate-500">Приемы не найдены</div>`;
+        return;
+      }
+
+      moves.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'bg-mkCard border border-mkBorder hover:border-slate-600 rounded-lg p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm';
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-slate-100">${m.name}</span>
+              ${m.enhanced ? '<span class="mk-mod">EX</span>' : ''}
+              <span class="text-xs px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-medium">${m.hit_level}</span>
+            </div>
+            <div class="flex items-center flex-wrap pt-0.5">
+              ${renderNotation(m.input, currentLayout)}
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 text-xs font-semibold self-end sm:self-auto">
+            <div class="text-center">
+              <div class="text-slate-500 uppercase text-[10px]">Старт</div>
+              <div class="text-slate-200 text-sm font-bold">${m.startup ?? '-'}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-slate-500 uppercase text-[10px]">В блок</div>
+              <div class="mt-0.5">${renderBlockAdv(m.block_adv)}</div>
+            </div>
+            <div class="text-center min-w-[36px]">
+              <div class="text-slate-500 uppercase text-[10px]">Урон</div>
+              <div class="text-slate-300 text-sm">${m.damage ?? '-'}</div>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateCatButtons() {
+      document.querySelectorAll('.cat-btn').forEach(b => {
+        if (b.dataset.cat === activeCategory) {
+          b.className = 'cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkGold text-black';
+        } else {
+          b.className = 'cat-btn px-3 py-1 text-xs font-semibold rounded bg-mkBorder hover:bg-slate-700 text-slate-300';
+        }
+      });
+    }
+
+    // --- СОБЫТИЯ ---
+    document.getElementById('back-btn').onclick = () => {
+      document.getElementById('moves-view').classList.add('hidden');
+      document.getElementById('back-btn').classList.add('hidden');
+      document.getElementById('roster-view').classList.remove('hidden');
+      document.getElementById('app-title').textContent = 'MK1 FRAME DATA';
+      currentCharData = null;
+    };
+
+    document.getElementById('tab-main').onclick = () => {
+      activeRosterType = 'main';
+      document.getElementById('tab-main').className = 'px-4 py-1.5 font-bold rounded-lg bg-mkGold text-black transition';
+      document.getElementById('tab-kameo').className = 'px-4 py-1.5 font-bold rounded-lg bg-mkBorder text-slate-300 hover:bg-slate-700 transition';
+      renderRoster();
+    };
+
+    document.getElementById('tab-kameo').onclick = () => {
+      activeRosterType = 'kameo';
+      document.getElementById('tab-kameo').className = 'px-4 py-1.5 font-bold rounded-lg bg-mkGold text-black transition';
+      document.getElementById('tab-main').className = 'px-4 py-1.5 font-bold rounded-lg bg-mkBorder text-slate-300 hover:bg-slate-700 transition';
+      renderRoster();
+    };
+
+    document.getElementById('roster-search').oninput = renderRoster;
+    document.getElementById('move-search').oninput = renderMoves;
+
+    document.getElementById('category-tabs').onclick = (e) => {
+      const btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      activeCategory = btn.dataset.cat;
+      updateCatButtons();
+      renderMoves();
+    };
+
+    document.getElementById('layout-select').onchange = (e) => {
+      currentLayout = e.target.value;
+      localStorage.setItem('mk1_gamepad_layout', currentLayout);
+      renderMoves();
+    };
+
+    const p7Btn = document.getElementById('filter-p7');
+    const p8Btn = document.getElementById('filter-p8');
+
+    p7Btn.onclick = () => {
+      punishFilter = punishFilter === 7 ? null : 7;
+      p7Btn.classList.toggle('border-yellow-500', punishFilter === 7);
+      p8Btn.classList.remove('border-yellow-500');
+      renderMoves();
+    };
+
+    p8Btn.onclick = () => {
+      punishFilter = punishFilter === 8 ? null : 8;
+      p8Btn.classList.toggle('border-yellow-500', punishFilter === 8);
+      p7Btn.classList.remove('border-yellow-500');
+      renderMoves();
+    };
+
+    // Запуск приложения
+    init();
+  </script>
+</body>
+</html>

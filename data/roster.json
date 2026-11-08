@@ -1,0 +1,280 @@
+{
+  "game": "Mortal Kombat 1",
+  "total_characters": 34,
+  "main_roster_count": 34,
+  "kameo_roster_count": 0,
+  "characters": [
+    {
+      "slug": "ashrah",
+      "display_name": "Ашра",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/ashrah.json",
+      "count": 77
+    },
+    {
+      "slug": "baraka",
+      "display_name": "Барака",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/baraka.json",
+      "count": 57
+    },
+    {
+      "slug": "general_shao",
+      "display_name": "Генерал Шао",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/general_shao.json",
+      "count": 79
+    },
+    {
+      "slug": "geras",
+      "display_name": "Герас",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/geras.json",
+      "count": 68
+    },
+    {
+      "slug": "johnny_cage",
+      "display_name": "Джонни Кейдж",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/johnny_cage.json",
+      "count": 69
+    },
+    {
+      "slug": "ermac",
+      "display_name": "Ермак",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/ermac.json",
+      "count": 74
+    },
+    {
+      "slug": "kenshi",
+      "display_name": "Кенши",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/kenshi.json",
+      "count": 97
+    },
+    {
+      "slug": "kitana",
+      "display_name": "Китана",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/kitana.json",
+      "count": 71
+    },
+    {
+      "slug": "conan",
+      "display_name": "Конан",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/conan.json",
+      "count": 65
+    },
+    {
+      "slug": "quan_chi",
+      "display_name": "Куан Чи",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/quan_chi.json",
+      "count": 84
+    },
+    {
+      "slug": "kung_lao",
+      "display_name": "Кун Лао",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/kung_lao.json",
+      "count": 66
+    },
+    {
+      "slug": "li_mei",
+      "display_name": "Ли Мей",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/li_mei.json",
+      "count": 55
+    },
+    {
+      "slug": "liu_kang",
+      "display_name": "Лю Кан",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/liu_kang.json",
+      "count": 57
+    },
+    {
+      "slug": "mileena",
+      "display_name": "Милина",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/mileena.json",
+      "count": 57
+    },
+    {
+      "slug": "peacemaker",
+      "display_name": "Миротворец",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/peacemaker.json",
+      "count": 61
+    },
+    {
+      "slug": "nitara",
+      "display_name": "Нитара",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/nitara.json",
+      "count": 65
+    },
+    {
+      "slug": "noob_saibot",
+      "display_name": "Нуб Сайбот",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/noob_saibot.json",
+      "count": 86
+    },
+    {
+      "slug": "omni_man",
+      "display_name": "Омни-мэн",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/omni_man.json",
+      "count": 67
+    },
+    {
+      "slug": "ghostface",
+      "display_name": "Призрачное лицо",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/ghostface.json",
+      "count": 95
+    },
+    {
+      "slug": "raiden",
+      "display_name": "Рейден",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/raiden.json",
+      "count": 61
+    },
+    {
+      "slug": "reiko",
+      "display_name": "Рейко",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/reiko.json",
+      "count": 56
+    },
+    {
+      "slug": "rain",
+      "display_name": "Рейн",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/rain.json",
+      "count": 75
+    },
+    {
+      "slug": "reptile",
+      "display_name": "Рептилия",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/reptile.json",
+      "count": 66
+    },
+    {
+      "slug": "sub_zero",
+      "display_name": "Саб-Зиро",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/sub_zero.json",
+      "count": 59
+    },
+    {
+      "slug": "cyrax",
+      "display_name": "Сайракс",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/cyrax.json",
+      "count": 71
+    },
+    {
+      "slug": "sektor",
+      "display_name": "Сектор",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/sektor.json",
+      "count": 74
+    },
+    {
+      "slug": "sindel",
+      "display_name": "Синдел",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/sindel.json",
+      "count": 58
+    },
+    {
+      "slug": "scorpion",
+      "display_name": "Скорпион",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/scorpion.json",
+      "count": 58
+    },
+    {
+      "slug": "smoke",
+      "display_name": "Смоук",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/smoke.json",
+      "count": 66
+    },
+    {
+      "slug": "takeda",
+      "display_name": "Такеда",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/takeda.json",
+      "count": 94
+    },
+    {
+      "slug": "tanya",
+      "display_name": "Таня",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/tanya.json",
+      "count": 64
+    },
+    {
+      "slug": "havik",
+      "display_name": "Хавик",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/havik.json",
+      "count": 59
+    },
+    {
+      "slug": "homelander",
+      "display_name": "Хоумлендер",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/homelander.json",
+      "count": 74
+    },
+    {
+      "slug": "shang_tsung",
+      "display_name": "Шан Цзун",
+      "is_kameo": false,
+      "roster_type": "main",
+      "data_path": "data/shang_tsung.json",
+      "count": 84
+    }
+  ]
+}
